@@ -6,6 +6,7 @@ public class Carro : MonoBehaviour
     public float forcaAceleracao = 30;
     public float limiteVelocidade = 100;
     public float velocidadeCurva = 120;
+    public float efeitoSolo = 25;
 
     void Awake()
     {
@@ -30,6 +31,9 @@ public class Carro : MonoBehaviour
             corpo.AddForce(transform.forward * velocidade * forcaAceleracao,
                 ForceMode.Acceleration);
         }
+        corpo.AddForce(Vector3.down * efeitoSolo * corpo.angularVelocity.magnitude,
+            ForceMode.Acceleration);
+
 
         // Curvar
         float fatorVelocidade = Mathf.Clamp01

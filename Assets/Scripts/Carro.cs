@@ -15,17 +15,21 @@ public class Carro : MonoBehaviour
         corpo.interpolation = RigidbodyInterpolation.Interpolate;
 
         corpo.constraints = RigidbodyConstraints.FreezeRotationX 
-            | RigidbodyConstraints.FreezeRotationY;
-        
+            | RigidbodyConstraints.FreezeRotationY |
+            RigidbodyConstraints.FreezeRotationZ;
+
     }
     private void FixedUpdate()
     {
         float velocidade = Input.GetAxisRaw("Vertical"); //W ou S /\ ou \/
         float girar = Input.GetAxisRaw("Horizontal"); //A ou D ou < ou >
 
-        //Acelera
-        corpo.AddForce(transform.forward * velocidade*forcaAceleracao,
-            ForceMode.Acceleration);
+        if (corpo.angularVelocity.magnitude < limiteVelocidade)
+        {
+            //Acelera
+            corpo.AddForce(transform.forward * velocidade * forcaAceleracao,
+                ForceMode.Acceleration);
+        }
 
         // Curvar
         float fatorVelocidade = Mathf.Clamp01

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class Carro : MonoBehaviour
 {
@@ -7,6 +9,9 @@ public class Carro : MonoBehaviour
     public float limiteVelocidade = 100;
     public float velocidadeCurva = 120;
     public float efeitoSolo = 25;
+    public float frear = 8;
+    public bool freioMao = false;
+    public float forcaoFreio = 20;
 
     void Awake()
     {
@@ -31,8 +36,25 @@ public class Carro : MonoBehaviour
             corpo.AddForce(transform.forward * velocidade * forcaAceleracao,
                 ForceMode.Acceleration);
         }
+        //para grudar no chão
         corpo.AddForce(Vector3.down * efeitoSolo * corpo.angularVelocity.magnitude,
             ForceMode.Acceleration);
+        
+        //para diminuir
+        Vector3 velocidadenormal = new Vector3(corpo.linearVelocity.x,
+            0, corpo.linearVelocity.z);
+
+        if (Input.GetKey(KeyCode.Space)){
+            corpo.AddForce(-velocidadenormal * forcaoFreio, ForceMode.Acceleration);
+        }      
+        else if (Mathf.Approximately(velocidade, 0))
+        {
+            corpo.AddForce(-velocidadenormal * frear, ForceMode.Acceleration);
+        }
+
+
+
+
 
 
         // Curvar
